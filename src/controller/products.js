@@ -10,6 +10,8 @@ const {
 } = require("../models/products");
 const commonHelper = require("../helper/common");
 const client = require("../config/redis");
+const cloudinary = require('../middlewares/cloudinary');
+
 
 const productController = {
   getAllProduct: async (req, res) => {
@@ -59,7 +61,8 @@ const productController = {
   insertProduct: async (req, res) => {
     const PORT = process.env.PORT || 5000;
     const DB_HOST = process.env.DB_HOST || "localhost";
-    const photo = req.file.filename;
+    const result = await cloudinary.uploader.upload(req.file.path)
+    const photo = result.secure_url;
     const { name, stock, price, description } = req.body;
     const {
       rows: [count],
@@ -71,7 +74,7 @@ const productController = {
       name,
       stock,
       price,
-      photo: `http://${DB_HOST}:${PORT}/img/${photo}`,
+      photo,
       description,
     };
     insert(data)

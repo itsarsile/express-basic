@@ -14,8 +14,8 @@ const { protect } = require("../middlewares/auth");
 router
   .get("/", getAllProduct)
   .get("/:id", getProduct)
-  .post("/", upload.single("photo"), insertProduct)
-  .put("/:id", upload.single("photo"), updateProduct)
+  .post("/", upload, insertProduct)
+  .put("/:id", upload, updateProduct)
   .delete("/:id", deleteProduct);
 
 module.exports = router;
